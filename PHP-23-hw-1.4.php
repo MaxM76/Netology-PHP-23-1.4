@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Задание 1.4.</title>
-</head>
-
 <?php
-
-$eurasia_animals = array(
+$eurasiaAnimals = array(
     "Capra ibex",
     "Sciurus vulgaris",
     "Cervus elaphus",
@@ -25,8 +15,7 @@ $eurasia_animals = array(
     "Camelus bactrianus",
     "Pongo",
 );
-
-$africa_animals = array(
+$africaAnimals = array(
     "Okapia Lankester",
     "Hexaprotodon liberiensis",
     "Potamochoerus porcus",
@@ -43,8 +32,7 @@ $africa_animals = array(
     "Dendroaspis polylepis",
     "Calamoichthys calabaricus",
 );
-
-$australia_animals = array(
+$australiaAnimals = array(
     "Tachyglossus",
     "Bubalus arnee",
     "Canis lupus dingo",
@@ -60,8 +48,7 @@ $australia_animals = array(
     "Dromaius novaehollandiae",
     "Dasyurus maculatus",
 );
-
-$antarctica_animals = array(
+$antarcticaAnimals = array(
     "Belgica antarctica",
     "Euphausia superba",
     "Aptenodytes patagonicus",
@@ -75,8 +62,7 @@ $antarctica_animals = array(
     "Procellariidae",
     "Phocidae",
 );
-
-$south_america_animals = array(
+$southAmericaAnimals = array(
     "Electrophorus electricus",
     "Arapaima gigas",
     "Dendrobates tinctorius",
@@ -89,8 +75,7 @@ $south_america_animals = array(
     "Lama guanicoe",
     "Hydrochoerus hydrochaeris",
 );
-
-$north_america_animals = array(
+$northAmericaAnimals = array(
     "Castor canadensis",
     "Dasypus novemcinctus",
     "Heloderma suspectum",
@@ -107,54 +92,64 @@ $north_america_animals = array(
     "Phrynosoma",
     "Bison",
 );
-
 $animals = array(
-    "Eurasia" => $eurasia_animals,
-    "Africa" => $africa_animals,
-    "Australia" => $australia_animals,
-    "Antarctica" => $antarctica_animals,
-    "South America" => $south_america_animals,
-    "North America" => $north_america_animals
+    "Eurasia" => $eurasiaAnimals,
+    "Africa" => $africaAnimals,
+    "Australia" => $australiaAnimals,
+    "Antarctica" => $antarcticaAnimals,
+    "South America" => $southAmericaAnimals,
+    "North America" => $northAmericaAnimals
 );
+
+for (reset($animals); ($k = key($animals)); next($animals)) {
+    for($i = 0; $i < count($animals[$k]); $i++) {
+        $tmpStrArr = explode(' ',$animals[$k][$i]);
+        if (count($tmpStrArr)==2) {
+            $worldAnimals[] = array("name" => $animals[$k][$i], "continent" => $k);
+        }
+    }
+}
+
+for($i = 0; $i < count($worldAnimals); $i++) {
+    $tmpStrArr = explode(' ',$worldAnimals[$i]["name"]);
+    $worldAnimals[$i]["name"] = $tmpStrArr[0];
+    $tmpSecondWrdsArr[] = $tmpStrArr[1];
+}
+
+shuffle($tmpSecondWrdsArr);
+
 ?>
+
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Задание 1.4.</title>
+  </head>
 
   <body>
     <h1>Задание 1.4.</h1>
 
 <?php
-for (reset($animals); ($k = key($animals)); next($animals)){
-    for($i = 0; $i < count($animals[$k]); $i++) {
-        $tmp_str_arr = explode(' ',$animals[$k][$i]);
-        if (count($tmp_str_arr)==2) $world_animals[] = array("name" => $animals[$k][$i], "continent" => $k);
-    }
-}
-
-for($i = 0; $i < count($world_animals); $i++) {
-    $tmp_str_arr = explode(' ',$world_animals[$i]["name"]);
-    $world_animals[$i]["name"] = $tmp_str_arr[0];
-    $tmp_second_wrds_arr[] = $tmp_str_arr[1];
-}
-
-shuffle($tmp_second_wrds_arr);
 $continent = "";
-$tmp_str = "";
-
-for($i = 0; $i < count($world_animals); $i++) {
-    if ($world_animals[$i]["continent"] !== $continent) {
-        if ($continent!=="") echo rtrim($tmp_str,", ") . "</p>";
-        $continent = $world_animals[$i]["continent"];
+$tmpStr = "";
+for($i = 0; $i < count($worldAnimals); $i++) {
+    if ($worldAnimals[$i]["continent"] !== $continent) {
+        if ($continent!=="") {
+            echo rtrim($tmpStr, ", ") . "</p>";
+        }
+        $continent = $worldAnimals[$i]["continent"];
         echo "<h2>$continent</h2>";
-        $tmp_str = "<p>";
+        $tmpStr = "<p>";
     }
-    $tmp_str_arr = array($world_animals[$i]["name"], $tmp_second_wrds_arr[$i]);
-    $world_animals[$i]["name"] = implode(' ',$tmp_str_arr);
-    $tmp_str = $tmp_str . $world_animals[$i]["name"] . ", ";
-
+    $tmpStrArr = array($worldAnimals[$i]["name"], $tmpSecondWrdsArr[$i]);
+    $worldAnimals[$i]["name"] = implode(' ',$tmpStrArr);
+    $tmpStr = $tmpStr . $worldAnimals[$i]["name"] . ", ";
 }
-
-echo rtrim($tmp_str,", ") . "</p>";
-
+echo rtrim($tmpStr,", ") . "</p>";
 ?>
 
-  </body>
+</body>
 </html>
