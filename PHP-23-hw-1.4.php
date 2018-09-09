@@ -101,22 +101,26 @@ $animals = array(
     "North America" => $northAmericaAnimals
 );
 
-for (reset($animals); ($k = key($animals)); next($animals)) {
-    for($i = 0; $i < count($animals[$k]); $i++) {
-        $tmpStrArr = explode(' ',$animals[$k][$i]);
+$worldAnimals = array();
+
+foreach ($animals as $continent => $continentAnimals) {
+    foreach ($continentAnimals as $animal) {
+        $tmpStrArr = explode(' ',$animal);
         if (count($tmpStrArr)==2) {
-            $worldAnimals[] = array("name" => $animals[$k][$i], "continent" => $k);
+            $worldAnimals[$animal] = $continent;
+            $tmpSecondWordsArr[] = $tmpStrArr[1];
         }
     }
 }
 
-for($i = 0; $i < count($worldAnimals); $i++) {
-    $tmpStrArr = explode(' ',$worldAnimals[$i]["name"]);
-    $worldAnimals[$i]["name"] = $tmpStrArr[0];
-    $tmpSecondWrdsArr[] = $tmpStrArr[1];
-}
+shuffle($tmpSecondWordsArr);
 
-shuffle($tmpSecondWrdsArr);
+$magicalAnimals = array();
+
+foreach ($worldAnimals as $animal => $continent) {
+    $tmpStrArr = explode(' ', $animal);
+    $magicalAnimals[$tmpStrArr[0] . ' ' . array_shift($tmpSecondWordsArr)] = $continent;
+}
 
 ?>
 
@@ -132,24 +136,10 @@ shuffle($tmpSecondWrdsArr);
   <body>
     <h1>Задание 1.4.</h1>
 
-<?php
-$continent = "";
-$tmpStr = "";
-for($i = 0; $i < count($worldAnimals); $i++) {
-    if ($worldAnimals[$i]["continent"] !== $continent) {
-        if ($continent!=="") {
-            echo rtrim($tmpStr, ", ") . "</p>";
-        }
-        $continent = $worldAnimals[$i]["continent"];
-        echo "<h2>$continent</h2>";
-        $tmpStr = "<p>";
-    }
-    $tmpStrArr = array($worldAnimals[$i]["name"], $tmpSecondWrdsArr[$i]);
-    $worldAnimals[$i]["name"] = implode(' ',$tmpStrArr);
-    $tmpStr = $tmpStr . $worldAnimals[$i]["name"] . ", ";
-}
-echo rtrim($tmpStr,", ") . "</p>";
-?>
+<?php foreach (array_keys($animals) as $continent) : ?>
+      <h2><?=$continent?></h2>
+      <p><?=implode(', ', array_keys($magicalAnimals, $continent))?></p>
+<?php endforeach;?>
 
-</body>
+  </body>
 </html>
